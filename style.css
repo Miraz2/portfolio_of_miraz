@@ -22,7 +22,9 @@
   inherits: false;
   initial-value: #006493;
 }
-
+html,body{
+  scroll-behavior: smooth;
+}
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -73,6 +75,7 @@ nav {
   transition: color 0.3s;
 }
 
+.nav-links a.link-active,
 .nav-links a:hover {
   color: var(--cyan);
 }
@@ -164,10 +167,24 @@ nav {
 
 .hero h2 {
   font-size: 2rem;
-  color: #00a4f4;
   margin-bottom: 5rem;
+  color: #00a4f4;
 }
 
+#writer {
+  color: #73d3ff;
+  border-right: 3px solid;
+  padding-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50%,
+  100% {
+    border-color: transparent;
+  }
+}
 .social-icons {
   display: flex;
   gap: 1rem;
@@ -178,7 +195,6 @@ nav {
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  /* background: oklch(100% 0.00011 271.152 / 0.05); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -629,7 +645,7 @@ footer {
   color: var(--cyan);
 }
 
-.footer-content .social-icons{
+.footer-content .social-icons {
   margin-bottom: 0;
 }
 .copyright {
@@ -638,7 +654,7 @@ footer {
   color: var(--gray);
   font-size: 0.8rem;
 }
-.designer{
+.designer {
   color: var(--gray);
   font-size: 0.9rem;
   margin-top: 2rem;
@@ -650,7 +666,7 @@ footer {
   right: 2rem;
   width: 40px;
   height: 40px;
-  background: #00A4F4;
+  background: #00a4f4;
   color: #fff;
   border-radius: 50%;
   display: flex;
