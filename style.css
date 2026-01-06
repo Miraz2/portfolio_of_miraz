@@ -901,7 +901,7 @@ footer {
     max-width: 350px;
     height: 400px;
   }
-  .hero-content{
+  .hero-content {
     align-self: center;
   }
 
@@ -1005,35 +1005,6 @@ footer {
 
   .logo {
     font-size: 1.1rem;
-  }
-
-  .hero {
-    padding: 5rem 1rem 2rem;
-  }
-
-  .hero h1 {
-    font-size: 1.8rem;
-  }
-
-  .hero h2 {
-    font-size: 1.1rem;
-  }
-
-  .badge {
-    font-size: 0.7rem;
-    padding: 0.3rem 1rem;
-  }
-  .social-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-  .hero-image {
-    max-width: 300px;
-    height: 350px;
-  }
-  .hero-buttons {
-    font-size: 0.8rem;
   }
 
   .profile-badge,
