@@ -1,87 +1,126 @@
+// ============================================
+// DOM ELEMENTS
+// ============================================
 const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.getElementById("navLinks");
-
-menuToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("active");
-});
-
-let activeLink = navLinks.querySelector(".link-active");
-navLinks.addEventListener("click", (e) => {
-  const link = e.target.closest("a");
-  if (!link) return;
-
-  // Remove active from current
-  activeLink?.classList.remove("link-active");
-  activeLink = link;
-
-  // Add to clicked
-  link.classList.add("link-active");
-});
-
-// Scroll to top button
 const scrollTopBtn = document.getElementById("scrollTop");
-const midPoint = window.innerHeight / 2;
-
+const nav = document.querySelector("nav");
 const sectionTitles = document.querySelectorAll(".section-title");
+const writerElement = document.getElementById("writer");
 
-let ticking = false;
-const viewportMid = window.innerHeight / 2;
+// ============================================
+// MOBILE MENU TOGGLE
+// ============================================
+function initMobileMenu() {
+  menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+}
 
-window.addEventListener("scroll", () => {
+// ============================================
+// NAVIGATION ACTIVE LINK MANAGEMENT
+// ============================================
+let activeLink = navLinks.querySelector(".link-active");
+
+function handleNavLinkClick() {
+  navLinks.addEventListener("click", (e) => {
+    const link = e.target.closest("a");
+    if (!link) return;
+
+    // Remove active class from current link
+    activeLink?.classList.remove("link-active");
+
+    // Update active link
+    activeLink = link;
+    link.classList.add("link-active");
+
+    // Close mobile menu on link click
+    navLinks.classList.remove("active");
+  });
+}
+
+function updateActiveLinkOnScroll() {
+  const viewportMid = window.innerHeight / 2;
+
+  for (const title of sectionTitles) {
+    const titlePosition = title.getBoundingClientRect().top;
+
+    if (titlePosition < viewportMid) {
+      const id = title.getAttribute("id");
+      const newActiveLink = navLinks.querySelector(`a[href="#${id}"]`);
+
+      if (newActiveLink && newActiveLink !== activeLink) {
+        activeLink?.classList.remove("link-active");
+        activeLink = newActiveLink;
+        activeLink.classList.add("link-active");
+      }
+    }
+  }
+}
+
+// ============================================
+// SCROLL TO TOP BUTTON
+// ============================================
+function initScrollToTop() {
+  scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
+
+function toggleScrollTopVisibility() {
   if (window.scrollY > 500) {
     scrollTopBtn.classList.add("visible");
   } else {
     scrollTopBtn.classList.remove("visible");
   }
+}
 
+// ============================================
+// NAVBAR BACKGROUND ON SCROLL
+// ============================================
+
+function updateNavbarBackground() {
+  if (window.scrollY > 100) {
+    nav.style.background = "rgba(20, 20, 20, 0.7)";
+  } else {
+    nav.style.background = "rgba(10, 10, 10, 0.95)";
+  }
+}
+
+// ============================================
+// SCROLL EVENT HANDLER (OPTIMIZED)
+// ============================================
+let ticking = false;
+
+function handleScroll() {
+  // Update scroll to top button visibility
+  toggleScrollTopVisibility();
+
+  // Update navbar background
+  updateNavbarBackground();
+
+  // Throttle active link updates using requestAnimationFrame
   if (!ticking) {
     window.requestAnimationFrame(() => {
-      for (const title of sectionTitles) {
-        const titlePosition = title.getBoundingClientRect().top;
-
-        if (titlePosition < viewportMid) {
-          const id = title.getAttribute("id");
-          const newActiveLink = navLinks.querySelector(`a[href="#${id}"]`);
-
-          if (newActiveLink && newActiveLink !== activeLink) {
-            activeLink?.classList.remove("link-active");
-            activeLink = newActiveLink;
-            activeLink.classList.add("link-active");
-          }
-        }
-      }
-
+      updateActiveLinkOnScroll();
       ticking = false;
     });
     ticking = true;
   }
-});
+}
 
-scrollTopBtn.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-});
-
-// Navbar background on scroll
-const nav = document.querySelector("nav");
-nav.style.transition = "background 0.3s ease, backdrop-filter 0.3s ease";
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 100) {
-    nav.style.background = "rgba(20, 20, 20, 0.7)";
-    nav.style.backdropFilter = "blur(10px)";
-  } else {
-    nav.style.background = "rgba(10, 10, 10, 0.95)";
+// ============================================
+// TYPING EFFECT
+// ============================================
+function initTypingEffect() {
+  if (!writerElement) {
+    console.error("Element with id 'writer' not found");
+    return;
   }
-});
 
-// Typing effect
-const writerElement = document.getElementById("writer");
-
-if (!writerElement) {
-  console.error("Element with id 'writer' not found");
-} else {
   const contents = [
     "Web Developer",
     "Designer",
@@ -93,10 +132,10 @@ if (!writerElement) {
   ];
 
   const config = {
-    typingSpeed: 100,
-    deletingSpeed: 50,
+    typingSpeed: 70,
+    deletingSpeed: 30,
     pauseEnd: 2000,
-    pauseStart: 500,
+    pauseStart: 400,
   };
 
   let contentIndex = 0;
@@ -106,10 +145,10 @@ if (!writerElement) {
   function type() {
     const currentContent = contents[contentIndex];
 
-    // Update text
+    // Update text content
     writerElement.textContent = isDeleting
-      ? currentContent.substring(0, charIndex - 1)
-      : currentContent.substring(0, charIndex + 1);
+    ? currentContent.substring(0, charIndex - 1)
+    : currentContent.substring(0, charIndex + 1);
 
     // Update character index
     charIndex += isDeleting ? -1 : 1;
@@ -120,7 +159,7 @@ if (!writerElement) {
       isDeleting = true;
       setTimeout(type, config.pauseEnd);
     } else if (isDeleting && charIndex === 0) {
-      // Finished deleting, move to next word
+      // Finished deleting, move to next content
       isDeleting = false;
       contentIndex = (contentIndex + 1) % contents.length;
       setTimeout(type, config.pauseStart);
@@ -131,5 +170,31 @@ if (!writerElement) {
     }
   }
 
+  // Start typing effect
   type();
 }
+
+// ============================================
+// INITIALIZE ALL FUNCTIONALITY
+// ============================================
+function init() {
+  // Initialize mobile menu
+  initMobileMenu();
+
+  // Initialize navigation
+  handleNavLinkClick();
+
+  // Initialize scroll to top button
+  initScrollToTop();
+
+  // Initialize typing effect
+  initTypingEffect();
+
+  // Attach scroll event listener
+  window.addEventListener("scroll", handleScroll);
+}
+
+// ============================================
+// START APPLICATION
+// ============================================
+init();
