@@ -241,6 +241,7 @@ nav {
     var(--gradient-color-right)
   );
   color: #fff;
+  white-space: nowrap;
   transition: --gradient-color-right 0.3s ease, --gradient-color-left 0.3s ease;
 }
 
