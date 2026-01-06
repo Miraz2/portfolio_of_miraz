@@ -22,7 +22,8 @@
   inherits: false;
   initial-value: #006493;
 }
-html,body{
+html,
+body {
   scroll-behavior: smooth;
 }
 body {
@@ -775,7 +776,6 @@ footer {
   }
 
   .hero {
-    text-align: center;
     padding: 7rem 1.5rem 3rem;
     min-height: auto;
   }
@@ -793,10 +793,8 @@ footer {
     font-size: 1.6rem;
     margin-bottom: 3rem;
   }
-
-  .hero-buttons,
-  .social-icons {
-    justify-content: center;
+  .hero-content {
+    align-self: baseline;
   }
 
   .hero-image {
@@ -899,52 +897,12 @@ footer {
 
 /* Mobile Landscape and Large Phones (600px) */
 @media (max-width: 600px) {
-  .hero {
-    padding: 5rem 1rem 2rem;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero h2 {
-    font-size: 1.2rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .badge {
-    font-size: 0.75rem;
-    padding: 0.3rem 1.2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .social-icons {
-    gap: 0.8rem;
-    margin-bottom: 2rem;
-  }
-
-  .social-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    gap: 0.8rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-  }
-
-  .hero-buttons .btn {
-    width: 100%;
-    text-align: center;
-  }
-
   .hero-image {
     max-width: 350px;
     height: 400px;
+  }
+  .hero-content{
+    align-self: center;
   }
 
   .section-title {
@@ -1065,10 +1023,17 @@ footer {
     font-size: 0.7rem;
     padding: 0.3rem 1rem;
   }
-
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
   .hero-image {
     max-width: 300px;
     height: 350px;
+  }
+  .hero-buttons {
+    font-size: 0.8rem;
   }
 
   .profile-badge,
