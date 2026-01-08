@@ -12,6 +12,7 @@ export default function typingEffect(writerElement, config, contents) {
   let isDeleting = false;
 
   function type() {
+    writerElement.style.animationName = "none"; // Stop blink animation during typing/deleting
     const currentContent = contents[contentIndex];
 
     // Update text content
@@ -26,11 +27,14 @@ export default function typingEffect(writerElement, config, contents) {
     if (!isDeleting && charIndex === currentContent.length) {
       // Finished typing, pause then start deleting
       isDeleting = true;
+
+      writerElement.style.animationName = "blink"; // Restart blink animation
       setTimeout(type, config.pauseEnd);
     } else if (isDeleting && charIndex === 0) {
       // Finished deleting, move to next content
       isDeleting = false;
       contentIndex = (contentIndex + 1) % contents.length;
+      writerElement.style.animationName = "blink"; // Restart blink animation
       setTimeout(type, config.pauseStart);
     } else {
       // Continue typing or deleting

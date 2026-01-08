@@ -180,7 +180,10 @@ nav {
   padding-right: 5px;
   white-space: nowrap;
   overflow: hidden;
-  animation: blink 1s step-end infinite;
+  /* animation: blink 1s step-end infinite; */
+  animation-duration: 1s;
+  animation-timing-function: step-end;
+  animation-iteration-count: infinite;
 }
 @keyframes blink {
   50%,
