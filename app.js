@@ -1,12 +1,15 @@
+import highlightOnScroll from "./highlightOnScroll.js";
+import typingEffect from "./typingEffect.js";
+
 // ============================================
 // DOM ELEMENTS
 // ============================================
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
-const scrollTopBtn = document.getElementById("scrollTop");
 const nav = document.querySelector("nav");
-const sectionTitles = document.querySelectorAll(".section-title");
+const navLinks = nav.querySelector("#navLinks");
+const menuToggle = nav.querySelector("#menuToggle");
+const sections = document.querySelectorAll("section");
 const writerElement = document.getElementById("writer");
+const scrollTopBtn = document.getElementById("scrollTop");
 
 // ============================================
 // MOBILE MENU TOGGLE
@@ -30,32 +33,13 @@ function handleNavLinkClick() {
     // Remove active class from current link
     activeLink?.classList.remove("link-active");
 
+    link.classList.add("link-active");
     // Update active link
     activeLink = link;
-    link.classList.add("link-active");
 
     // Close mobile menu on link click
     navLinks.classList.remove("active");
   });
-}
-
-function updateActiveLinkOnScroll() {
-  const viewportMid = window.innerHeight / 2;
-
-  for (const title of sectionTitles) {
-    const titlePosition = title.getBoundingClientRect().top;
-
-    if (titlePosition < viewportMid) {
-      const id = title.getAttribute("id");
-      const newActiveLink = navLinks.querySelector(`a[href="#${id}"]`);
-
-      if (newActiveLink && newActiveLink !== activeLink) {
-        activeLink?.classList.remove("link-active");
-        activeLink = newActiveLink;
-        activeLink.classList.add("link-active");
-      }
-    }
-  }
 }
 
 // ============================================
@@ -101,77 +85,6 @@ function handleScroll() {
 
   // Update navbar background
   updateNavbarBackground();
-
-  // Throttle active link updates using requestAnimationFrame
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-      updateActiveLinkOnScroll();
-      ticking = false;
-    });
-    ticking = true;
-  }
-}
-
-// ============================================
-// TYPING EFFECT
-// ============================================
-function initTypingEffect() {
-  if (!writerElement) {
-    console.error("Element with id 'writer' not found");
-    return;
-  }
-
-  const contents = [
-    "Web Developer",
-    "Designer",
-    "Problem Solver",
-    "Creative Thinker",
-    "Full Stack Developer",
-    "UI/UX Enthusiast",
-    "Tech Enthusiast",
-  ];
-
-  const config = {
-    typingSpeed: 70,
-    deletingSpeed: 30,
-    pauseEnd: 2000,
-    pauseStart: 400,
-  };
-
-  let contentIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-
-  function type() {
-    const currentContent = contents[contentIndex];
-
-    // Update text content
-    writerElement.textContent = isDeleting
-    ? currentContent.substring(0, charIndex - 1)
-    : currentContent.substring(0, charIndex + 1);
-
-    // Update character index
-    charIndex += isDeleting ? -1 : 1;
-
-    // Determine next action
-    if (!isDeleting && charIndex === currentContent.length) {
-      // Finished typing, pause then start deleting
-      isDeleting = true;
-      setTimeout(type, config.pauseEnd);
-    } else if (isDeleting && charIndex === 0) {
-      // Finished deleting, move to next content
-      isDeleting = false;
-      contentIndex = (contentIndex + 1) % contents.length;
-      setTimeout(type, config.pauseStart);
-    } else {
-      // Continue typing or deleting
-      const speed = isDeleting ? config.deletingSpeed : config.typingSpeed;
-      setTimeout(type, speed);
-    }
-  }
-
-  // Start typing effect
-  type();
 }
 
 // ============================================
@@ -188,7 +101,27 @@ function init() {
   initScrollToTop();
 
   // Initialize typing effect
-  initTypingEffect();
+  typingEffect(
+    writerElement,
+    {
+      typingSpeed: 70,
+      deletingSpeed: 30,
+      pauseEnd: 2000,
+      pauseStart: 400,
+    },
+    [
+      "Web Developer",
+      "Designer",
+      "Problem Solver",
+      "Creative Thinker",
+      "Full Stack Developer",
+      "UI/UX Enthusiast",
+      "Tech Enthusiast",
+    ]
+  );
+
+  // Initialize highlight on scroll
+  highlightOnScroll(sections, navLinks);
 
   // Attach scroll event listener
   window.addEventListener("scroll", handleScroll);
